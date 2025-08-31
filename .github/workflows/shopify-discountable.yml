@@ -1,0 +1,39 @@
+name: Shopify Discountable Tagger
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"   # κάθε 15'
+  workflow_dispatch:         # manual run
+  push:
+    paths:
+      - "shopify_discountable.py"
+      - ".github/workflows/shopify-discountable.yml"
+      - "requirements.txt"
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run tag sync
+        env:
+          SHOP_URL: ${{ secrets.SHOP_URL }}           # π.χ. your-store.myshopify.com
+          SHOPIFY_TOKEN: ${{ secrets.SHOPIFY_TOKEN }} # Admin API access token
+          API_VERSION: "2025-01"
+          TAG_NAME: "discountable"
+        run: |
+          python shopify_discountable.py
