@@ -31,9 +31,10 @@ jobs:
 
       - name: Run tag sync
         env:
-          SHOP_URL: ${{ secrets.SHOP_URL }}           # π.χ. your-store.myshopify.com
-          SHOPIFY_TOKEN: ${{ secrets.SHOPIFY_TOKEN }} # Admin API access token
+          SHOP_URL: ${{ secrets.SHOP_URL }}
+          SHOPIFY_TOKEN: ${{ secrets.SHOPIFY_TOKEN }}
           API_VERSION: "2025-01"
           TAG_NAME: "discountable"
+          COLLECTION_ID: "537605406986"        # ← Βάλε εδώ το ID σου
         run: |
           python shopify_discountable.py
